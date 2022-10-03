@@ -129,6 +129,16 @@ const Header = () => {
 
       {/* Mobile */}
       <div className="flex md:hidden items-center justify-between  w-full h-full">
+        <Link to={'/'}>
+          <motion.div
+            whileTap={{ scale: 0.6 }}
+            className="flex items-center gap-2"
+          >
+            <img src={logo} alt="logo" className="w-10 object-cover" />
+            <p className="text-gray-800 text-xl font-bold">City</p>
+          </motion.div>
+        </Link>
+
         <div className="relative flex items-center justify-center ml-5 cursor-pointer">
           <motion.div whileTap={{ scale: 0.6 }}>
             <IoMdBasket className="text-xl text-gray-700" />
@@ -140,16 +150,6 @@ const Header = () => {
             </motion.span>
           </motion.div>
         </div>
-
-        <Link to={'/'}>
-          <motion.div
-            whileTap={{ scale: 0.6 }}
-            className="flex items-center gap-2"
-          >
-            <img src={logo} alt="logo" className="w-10 object-cover" />
-            <p className="text-gray-800 text-xl font-bold">City</p>
-          </motion.div>
-        </Link>
 
         <div className="relative">
           <motion.img

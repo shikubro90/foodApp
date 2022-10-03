@@ -129,18 +129,6 @@ const Header = () => {
 
       {/* Mobile */}
       <div className="flex md:hidden items-center justify-between  w-full h-full">
-        <div className="relative flex items-center justify-center ml-5 cursor-pointer">
-          <motion.div whileTap={{ scale: 0.6 }}>
-            <IoMdBasket className="text-xl text-gray-700" />
-            <motion.span
-              whileHover={{ scale: 1.1 }}
-              className="drop-shadow-md rounded-full w-5 h-5 bg-cart bg-car bg-red-600 flex justify-center items-center text-[.6rem] text-white -top-4 -right-2 absolute"
-            >
-              2
-            </motion.span>
-          </motion.div>
-        </div>
-
         <Link to={'/'}>
           <motion.div
             whileTap={{ scale: 0.6 }}
@@ -159,6 +147,18 @@ const Header = () => {
             className="w-6 h-6 min-w-[40px] min-h-[40px] ml-5 cursor-pointer drop-shadow-xl rounded-full"
             onClick={login}
           />
+
+          <div className="relative flex items-center justify-center ml-5 cursor-pointer">
+            <motion.div whileTap={{ scale: 0.6 }}>
+              <IoMdBasket className="text-xl text-gray-700" />
+              <motion.span
+                whileHover={{ scale: 1.1 }}
+                className="drop-shadow-md rounded-full w-5 h-5 bg-cart bg-car bg-red-600 flex justify-center items-center text-[.6rem] text-white -top-4 -right-2 absolute"
+              >
+                2
+              </motion.span>
+            </motion.div>
+          </div>
 
           {isMenu && (
             <motion.div
