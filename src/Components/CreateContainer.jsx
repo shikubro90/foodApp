@@ -10,6 +10,8 @@ import {
 } from "react-icons/md";
 import { categories } from "../utils/Data";
 import Loader from "./Loader";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../Firebase.config";
 
 const CreateContainer = () => {
   const [title, setTitle] = useState("");
@@ -20,11 +22,45 @@ const CreateContainer = () => {
   const [alertStatus, setAlertStatus] = useState("danger");
   const [msg, setMsg] = useState("message");
   const [imageAsset, setImageAssets] = useState(null);
-  const [isLoading, setImageLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const uploadImage = () => {};
+  const uploadImage = (e) => {
+    setIsLoading(true);
+    const imageFile = e.target.files[0];
+    const storageRef = ref(storage,`Images/${Date.now()}-${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const uploadProgress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        setField(true);
+        setMsg("Error While Uploading the image: Try Again 😥");
+        setAlertStatus("Danger");
+        setTimeout(() => {
+          setField(false);
+          setIsLoading(false);
+        }, 4000);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageAssets(downloadURL);
+          setIsLoading(false);
+          setField(true);
+          setMsg("Image uploaded successfully 🥰");
+          setAlertStatus("success");
+          setTimeout(() => {
+            setField(false);
+          }, 4000);
+        });
+      }
+    );
+  };
   const deleteImage = () => {};
   const saveDetails = () => {};
+
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
       <div className="w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center gap-4">
@@ -70,7 +106,7 @@ const CreateContainer = () => {
               categories.map((item) => {
                 return (
                   <option
-                    key={item.key}
+                    key={item.id}
                     value={item.urlParamName}
                     className="text-base border-0 outline-none capitalize bg-white text-headingColor"
                   >
@@ -107,7 +143,7 @@ const CreateContainer = () => {
               ) : (
                 <>
                   <div className="relative h-full">
-                    <img src={imageAsset} alt="" />
+                    <img src={imageAsset} alt="" className="w-full h-full object-cover"/>
                     <button
                       type="button"
                       className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out"
