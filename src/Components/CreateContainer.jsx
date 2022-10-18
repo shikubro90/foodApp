@@ -10,8 +10,16 @@ import {
 } from "react-icons/md";
 import { categories } from "../utils/Data";
 import Loader from "./Loader";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { storage } from "../Firebase.config";
+import { getAllFoodItems, saveItem } from "../utils/firebaseFunction";
+import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
 
 const CreateContainer = () => {
   const [title, setTitle] = useState("");
@@ -24,10 +32,12 @@ const CreateContainer = () => {
   const [imageAsset, setImageAssets] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [{ foodItems }, dispatch] = useStateValue();
+
   const uploadImage = (e) => {
     setIsLoading(true);
     const imageFile = e.target.files[0];
-    const storageRef = ref(storage,`Images/${Date.now()}-${imageFile.name}`);
+    const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
       "state_changed",
@@ -58,8 +68,81 @@ const CreateContainer = () => {
       }
     );
   };
-  const deleteImage = () => {};
-  const saveDetails = () => {};
+  const deleteImage = () => {
+    setIsLoading(true);
+    const deleteRef = ref(storage, imageAsset);
+    deleteObject(deleteRef).then(() => {
+      setImageAssets(null);
+      setIsLoading(false);
+      setField(true);
+      setMsg("Image deleted successfully");
+      setAlertStatus("success");
+      setTimeout(() => {
+        setField(false);
+      }, 4000);
+    });
+  };
+  const saveDetails = () => {
+    setIsLoading(true);
+    try {
+      if (!title || !categories || !price || !calories || !imageAsset) {
+        setField(true);
+        setMsg("Required field can't be empty");
+        setAlertStatus("danger");
+        setTimeout(() => {
+          setField(false);
+          setIsLoading(false);
+        }, 4000);
+      } else {
+        const data = {
+          id: `${Date.now()}`,
+          title: title,
+          imageURL: imageAsset,
+          category: category,
+          calories: calories,
+          qty: 1,
+          price: price,
+        };
+
+        saveItem(data);
+        setIsLoading(false);
+        setField(true);
+        setMsg("Data uploaded successfully");
+        setAlertStatus("success");
+        clearData();
+        setTimeout(() => {
+          setField(false);
+        }, 4000);
+      }
+    } catch (error) {
+      console.log(error);
+      setField(true);
+      setMsg("Error While Uploading data: Try Again 😥");
+      setAlertStatus("Danger");
+      setTimeout(() => {
+        setField(false);
+        setIsLoading(false);
+      }, 4000);
+    }
+    fetchData();
+  };
+
+  const clearData = () => {
+    setTitle("");
+    setImageAssets(null);
+    setCalories("");
+    setPrice("");
+    setCategory(null);
+  };
+
+  const fetchData = async () => {
+    await getAllFoodItems().then((data) => {
+      dispatch({
+        type: actionType.SET_FOOD_ITEMS,
+        foodItems: data,
+      });
+    });
+  };
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
@@ -143,7 +226,11 @@ const CreateContainer = () => {
               ) : (
                 <>
                   <div className="relative h-full">
-                    <img src={imageAsset} alt="" className="w-full h-full object-cover"/>
+                    <img
+                      src={imageAsset}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                     <button
                       type="button"
                       className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out"
