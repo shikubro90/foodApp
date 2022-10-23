@@ -26,7 +26,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                 <motion.img
                   whileHover={{ scale: 1.25 }}
                   src={
-                    item.imageURL
+                    
                   }
                   alt=""
                   className="w-40 -mt-8"

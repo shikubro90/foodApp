@@ -1,32 +1,31 @@
 import { motion } from 'framer-motion'
 import React, { useEffect } from 'react'
-import { useRef } from 'react'
 import { MdShoppingBasket } from 'react-icons/md'
 
 const RowContainer = ({ flag, data, scrollValue }) => {
   
   useEffect(()=>{
-    rowContainer.current.scrollLeft += scrollValue;
+
   },[scrollValue])
 
-  const rowContainer = useRef()
+  
 
   return (
     <div
-      ref={rowContainer}
-      className={`w-full my-10 flex gap-3 scroll-smooth ${
+      ref={RowContainer}
+      className={`w-full my-10 flex gap-3 ${
         flag ? 'overflow-x-scroll scrollbar-none' : 'overflow-x-hidden'
       }`}
     >
       {data &&
-        data.map((item) => {
+        data.map((data) => {
           return (
-            <div key={item.id} className="w-300 min-w-[300px] md:w-340 my-12 px-4 h-auto md:px-5 backdrop-blur-lg bg-cardOverlay rounded-lg drop-shadow-lg hover:drop-shadow-2xl">
+            <div key={data.id} className="w-300 min-w-[300px] md:w-340 my-12 px-4 h-auto md:px-5 backdrop-blur-lg bg-cardOverlay rounded-lg drop-shadow-lg hover:drop-shadow-2xl">
               <div className="w-full flex items-center justify-between">
                 <motion.img
                   whileHover={{ scale: 1.25 }}
                   src={
-                    item.imageURL
+                    'https://firebasestorage.googleapis.com/v0/b/foodapp-6e162.appspot.com/o/Images%2F1666128823600-f2.png?alt=media&token=d259ef63-ceb6-4de1-be5a-679e7cada694'
                   }
                   alt=""
                   className="w-40 -mt-8"

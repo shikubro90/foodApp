@@ -9,7 +9,7 @@ import RowContainer from './RowContainer'
 
 const MainContainer = () => {
   const [{ foodItems }, dispatch] = useStateValue()
-  const [scrollValue, setScrollValue] = useState(0)
+  const { scrollValue, setScrollValue = useState(0)
 
   useEffect(() => {}, [scrollValue])
 

@@ -9,9 +9,11 @@ import RowContainer from './RowContainer'
 
 const MainContainer = () => {
   const [{ foodItems }, dispatch] = useStateValue()
-  const [scrollValue, setScrollValue] = useState(0)
+  const {scrollValue, setScrollValue} =u seState(0)
+  
+  useEffect(()=>{
 
-  useEffect(() => {}, [scrollValue])
+  },[scrollValue])
 
   return (
     <div className="w-full h-auto flex flex-col justify-center items-center">
@@ -23,15 +25,13 @@ const MainContainer = () => {
             Our Fresh & Healthy Food
           </p>
           <div className="hidden md:flex gap-3 items-center">
-            <motion.div
-              onClick={() => setScrollValue(-200)}
+            <motion.div onClick={()=>setScrollValue(-200)}
               whileTap={{ scale: 0.75 }}
               className="w-8 h-8 bg-orange-300 rounded-lg flex items-center justify-center hover:shadow-lg cursor-pointer hover:bg-orange-500"
             >
-              <MdChevronLeft className="text-base text-white" />
+              <MdChevronLeft className="text-base text-white"  />
             </motion.div>
-            <motion.div
-              onClick={() => setScrollValue(200)}
+            <motion.div onClick={()=>setScrollValue(200)}
               whileTap={{ scale: 0.75 }}
               className="w-8 h-8 bg-orange-300 rounded-lg flex items-center justify-center hover:shadow-lg cursor-pointer hover:bg-orange-500"
             >
