@@ -5,11 +5,14 @@ import { useEffect } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { useStateValue } from '../context/StateProvider'
 import HomeContainer from './HomeContainer'
+import MenuContainer from './MenuContainer'
 import RowContainer from './RowContainer'
+import Loader from "./Loader";
 
 const MainContainer = () => {
   const [{ foodItems }, dispatch] = useStateValue()
   const [scrollValue, setScrollValue] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {}, [scrollValue])
 
@@ -39,12 +42,15 @@ const MainContainer = () => {
             </motion.div>
           </div>
         </div>
-        <RowContainer
+        {isLoading ? <Loader/> : <RowContainer
           scrollValue={scrollValue}
           flag={true}
           data={foodItems?.filter((n) => n.category === 'fruits')}
-        />
+          setIsLoading={setIsLoading}
+        /> }
+        
       </section>
+      <MenuContainer/>
     </div>
   )
 }
